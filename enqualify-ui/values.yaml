@@ -1,0 +1,49 @@
+
+namespace: enqualifyapp
+
+# Image
+image:
+  repository: dockerhub.io/enqurainc/enverify-ui
+  tag: "20240813.1"
+  pullPolicy: IfNotPresent
+
+# Replica
+replicaCount: 1
+
+# Service
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# Image
+imagePullSecrets:
+  - name: dockerhubsecret
+
+# Deployment
+strategy:
+  type: Recreate
+
+# Container
+containerPorts:
+  http: 8080
+
+# Volume
+volumes:
+  appsettingsjs:
+    configMap: enqualify-ui
+  videopvc:
+    persistentVolumeClaim:
+      claimName: enqualify-ui-claim
+
+# Volume
+volumeMounts:
+  - name: appsettingsjs
+    mountPath: /opt/app-root/app/appsettings.json
+    subPath: appsettings.json
+
+# Uygulama
+application:
+  settings:
+    ServiceBase: ""
+    UIServiceBase: ""

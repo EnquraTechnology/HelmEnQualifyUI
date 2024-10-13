@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+   name: enqualify-ui-claim
+   namespaces: enqualifyapp
+spec:
+  storageClassName: nfs-sc
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+       storage: 100Gi
