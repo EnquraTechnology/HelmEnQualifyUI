@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.service: enqualify-ui
+  name: enqualify-ui
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      io.service: enqualify-ui
+  strategy:
+    type: {{ .Values.strategy.type }}
+  template:
+    metadata:
+      labels:
+        io.service: enqualify-ui
+        app : enqualify-ui
+    spec:
+      containers:
+      - resources:
+          limits:
+            cpu: 1400m
+            memory: 30000Mi
+          requests:
+            cpu: 200m
+            memory: 1000Mi
+        name: enqualify-api
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.containerPorts.http }}
+        env:
+        - name: ServiceBase
+          value: "{{ .Values.application.settings.ServiceBase }}"
+        - name: jwtkey
+          value: "{{ .Values.application.tokens.auth.jwt.key }}"
+        - name: signkey
+          value: "{{ .Values.application.tokens.request.sign.key }}"            
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /api/status/get
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 30
+        readinessProbe:
+          failureThreshold: 20
+          httpGet:
+            path: /api/status/get
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        volumeMounts:
+        - name: appsettingsjs
+          mountPath: {{ .Values.volumeMounts[0].mountPath }}
+          subPath: {{ .Values.volumeMounts[0].subPath }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets[0].name }}
+      volumes:
+      - name: appsettingsjs
+        configMap:
+          name: {{ .Values.volumes.appsettingsjs.configMap }}
