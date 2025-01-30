@@ -26,7 +26,7 @@ spec:
           requests:
             cpu: 200m
             memory: 1000Mi
-        name: enqualify-api
+        name: enqualify-u
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
@@ -60,10 +60,10 @@ spec:
           timeoutSeconds: 30
         volumeMounts:
         - name: appsettingsjs
-          mountPath: {{ .Values.volumeMounts[0].mountPath }}
-          subPath: {{ .Values.volumeMounts[0].subPath }}
-      imagePullSecrets:
-      - name: {{ .Values.imagePullSecrets[0].name }}
+          mountPath: /opt/app-root/app/appsettings.json
+          subPath: appsettings.json
+      #imagePullSecrets:
+      #- name: 
       volumes:
       - name: appsettingsjs
         configMap:

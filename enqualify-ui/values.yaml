@@ -3,8 +3,8 @@ namespace: enqualifyapp
 
 # Image
 image:
-  repository: dockerhub.io/enqurainc/enqualify-ui
-  tag: "20240813.1"
+  repository: ""
+  tag: ""
   pullPolicy: IfNotPresent
 
 # Replica
@@ -15,10 +15,6 @@ service:
   type: ClusterIP
   port: 8080
   targetPort: 8080
-
-# Image
-imagePullSecrets:
-  - name: dockerhubsecret
 
 # Deployment
 strategy:
@@ -35,12 +31,6 @@ volumes:
   videopvc:
     persistentVolumeClaim:
       claimName: enqualify-ui-claim
-
-# Volume
-volumeMounts:
-  appsettingsjs:
-    mountPath: /opt/app-root/app/appsettings.json
-    subPath: appsettings.json
 
 # Uygulama
 application:

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: enqualify-ui
-  namespace: enqualifyapp
+  namespace: {{ .Values.namespace }}
 data:
   appsettings.json: |
     {

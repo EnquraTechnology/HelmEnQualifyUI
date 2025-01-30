@@ -7,7 +7,6 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   ports:
-  - name: port8080
     port: {{ .Values.service.port }}
     targetPort: {{ .Values.service.targetPort }}
   selector:
